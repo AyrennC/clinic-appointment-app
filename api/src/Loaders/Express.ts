@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 
-export default (app: express.Application): void => {
+export default ({ app }: { app: express.Application }): void => {
   app.use(cors());
 
   app.use(bodyParser.json());

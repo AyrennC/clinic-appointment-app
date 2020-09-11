@@ -1,6 +1,7 @@
 const TYPES = {
   // Services
   AuthService: Symbol('AuthService'),
+  ClinicService: Symbol('ClinicService'),
 
   // Models
   Sequelize: Symbol('Sequelize'),

@@ -10,7 +10,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { Logger } from 'winston';
 const route = Router();
 
-export default (app: Router) => {
+export default (app: Router): void => {
   app.use('/auth', route);
 
   route.post(

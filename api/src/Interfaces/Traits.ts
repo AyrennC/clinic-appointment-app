@@ -11,3 +11,7 @@ export interface HasPassword {
   password: string;
   salt: string;
 }
+
+export interface HasClinic {
+  clinicId: string;
+}
