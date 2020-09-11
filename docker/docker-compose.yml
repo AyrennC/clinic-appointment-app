@@ -1,0 +1,38 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - '80:80'
+    links:
+      - api:api
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      - PORT=3000
+      - DB_NAME=db
+      - DB_USER=user
+      - DB_PASSWORD=mysecretpassword
+      - DB_HOST=database
+      - DB_PORT=5432
+      - NODE_ENV=development
+      - "JWT_SECRET=${JWT_SECRET}"
+    links:
+      - database:database
+    volumes:
+      - ./../api:/usr/src/api
+    ports:
+      - '3000'
+    depends_on:
+      - "database"
+  database:
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    env_file: database/psql.env
+    ports:
+      - '5431:5432'
