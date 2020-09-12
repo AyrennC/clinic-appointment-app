@@ -1,4 +1,4 @@
-export interface Clinic {
+export interface IClinic {
   name: string;
   email: string;
   password: string;
@@ -6,6 +6,6 @@ export interface Clinic {
   address: string;
 }
 
-export interface ClinicInputDTO extends Clinic {
+export interface IClinicInputDTO extends IClinic {
   password: string;
 }

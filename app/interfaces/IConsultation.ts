@@ -1,5 +1,3 @@
-import { HasClinic, HasId, HasTimestamps } from './Traits';
-
 export interface IConsultationInputDTO {
   doctor: string;
   patient: string;
@@ -8,8 +6,3 @@ export interface IConsultationInputDTO {
   fee: number;
   date: Date;
 }
-
-export type IConsultation = IConsultationInputDTO &
-  HasId &
-  HasTimestamps &
-  HasClinic;

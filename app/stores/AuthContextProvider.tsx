@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Reducer} from "react";
 import AsyncStorage from "@react-native-community/async-storage";
-import {ClinicInputDTO} from "../interfaces/Clinic";
+import {IClinicInputDTO} from "../interfaces/IClinic";
 
 export interface IAuthState {
   token: string | null
@@ -14,7 +14,7 @@ export interface IAuthContext {
   actions: {
     signIn: (email: string, password: string) => Promise<void>;
     signOut: () => void;
-    signUp: (inputDTO: ClinicInputDTO) => Promise<void>;
+    signUp: (inputDTO: IClinicInputDTO) => Promise<void>;
   }
 }
 
