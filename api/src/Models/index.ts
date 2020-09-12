@@ -25,7 +25,7 @@ export const ConsultationModel = ConsultationFactory(dbConfig);
 
 ClinicModel.hasMany(ConsultationModel);
 
-ConsultationModel.hasOne(ConsultationModel, { as: 'FollowUp' });
+ConsultationModel.hasOne(ConsultationModel, { as: 'followUp' });
 
 ClinicModel.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());

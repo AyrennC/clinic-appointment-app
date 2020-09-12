@@ -7,17 +7,18 @@ import {StackScreenProps} from "@react-navigation/stack";
 import {RootStackParamList} from "../types";
 import {AuthContext} from "../stores/AuthContextProvider";
 import {AgendaContext} from "../stores/AgendaContextProvider";
+import TouchableButton from "../components/TouchableButton";
 
 type Props = StackScreenProps<RootStackParamList, 'SignIn'>;
 
-export default function AgendaScreen({ navigation }: Props) {
+export default function AgendaScreen({navigation}: Props) {
   const authContext = React.useContext(AuthContext)
   const agendaContext = React.useContext(AgendaContext)
 
   const fetchAgendas = () => {
-    if (authContext?.state.token && agendaContext)  {
-      const { fetchAgendas } = agendaContext.actions;
-      const { token } = authContext.state;
+    if (authContext?.state.token && agendaContext) {
+      const {fetchAgendas} = agendaContext.actions;
+      const {token} = authContext.state;
       fetchAgendas(token).then();
     }
   }
@@ -34,15 +35,8 @@ export default function AgendaScreen({ navigation }: Props) {
         rowHasChanged={(r1: IConsultation, r2: IConsultation) => r1.id !== r2.id}
         loadItemsForMonth={fetchAgendas}
       />
-      <View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            navigation.navigate('AddConsultation')
-          }}
-        >
-          <Text style={styles.buttonText}>Add Consultation</Text>
-        </TouchableOpacity>
+      <View style={styles.btnView}>
+        <TouchableButton label="ADD CONSULTATION" onPress={() => navigation.navigate('AddConsultation')}/>
       </View>
     </View>
   )
@@ -53,12 +47,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between'
   },
-  button: {
-    backgroundColor: '#74b9ff',
-    padding: 18,
-    alignItems: 'center'
-  },
-  buttonText: {
-    fontSize: 22,
+  btnView: {
+    alignItems: 'center',
+    paddingBottom: 12
   }
 });

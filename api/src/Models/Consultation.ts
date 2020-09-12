@@ -23,15 +23,19 @@ export function ConsultationFactory(sequelize: Sequelize): ConsultationModel {
       allowNull: false,
     },
     diagnosis: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     medication: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     fee: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    date: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
     createdAt: {
