@@ -49,7 +49,7 @@ export default function SignUpScreen({navigation}: Props) {
           type="entypo"
           onChangeText={setAddress}
           height={120}
-          labelColor="white"
+          labelColor="#d1d1d1"
           showLabel
           multiline>
           Address
@@ -58,7 +58,7 @@ export default function SignUpScreen({navigation}: Props) {
         <TouchableButton onPress={onSignUp} label="REGISTER"/>
 
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-          <MontserratText style={styles.loginText}>Already have an account?</MontserratText>
+          <MontserratText style={styles.backText}>Already have an account?</MontserratText>
         </TouchableOpacity>
       </>
     </FormView>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     marginBottom: 40,
   },
-  loginText: {
+  backText: {
     color: "white",
   }
 });

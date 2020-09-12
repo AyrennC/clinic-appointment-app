@@ -35,7 +35,7 @@ export default function SignInScreen({navigation}: Props) {
         </StyledTextInput>
         <TouchableButton onPress={onLogin} label="LOGIN"/>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <MontserratText style={styles.loginText}>Register an account</MontserratText>
+          <MontserratText style={styles.backText}>Register an account</MontserratText>
         </TouchableOpacity>
       </>
     </FormView>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 38,
     marginBottom: 40
   },
-  loginText: {
+  backText: {
     color: "white"
   }
 });

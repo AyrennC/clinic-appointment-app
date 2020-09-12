@@ -17,11 +17,11 @@ export default (app: Router): void => {
     '/create',
     celebrate({
       body: Joi.object({
-        doctor: Joi.string().required(),
-        patient: Joi.string().required(),
+        doctor: Joi.string().max(200).required(),
+        patient: Joi.string().max(200).required(),
         diagnosis: Joi.string().required(),
         medication: Joi.string().required(),
-        fee: Joi.number().required(),
+        fee: Joi.number().positive().required(),
         date: Joi.date().required(),
       }),
     }),

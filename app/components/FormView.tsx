@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {View} from "./Themed";
 
-export default function FormView({children}: {children: JSX.Element}) {
+export default function FormView({children}: { children: JSX.Element }) {
   return (
     <View style={styles.container}>
       {children}

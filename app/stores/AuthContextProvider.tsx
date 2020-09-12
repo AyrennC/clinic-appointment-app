@@ -8,6 +8,7 @@ export interface IAuthState {
   token: string | null
   isLoading: boolean
   isSignout: boolean
+  error: string | null
 }
 
 export interface IAuthContext {
@@ -20,8 +21,9 @@ export interface IAuthContext {
 }
 
 export interface IAction {
-  type: 'RESTORE_TOKEN' | 'SIGN_IN' | 'SIGN_OUT'
+  type: 'RESTORE_TOKEN' | 'SIGN_IN' | 'SIGN_OUT' | 'ACTION_FAILED'
   token?: string | null
+  error?: string | null
 }
 
 export const AuthContext = React.createContext<IAuthContext | undefined>(undefined);
@@ -39,30 +41,38 @@ const AuthContextProvider = ({children}: Props) => {
             ...prevState,
             token: action.token ?? null,
             isLoading: false,
+            error: null
           };
         case 'SIGN_IN':
           return {
             ...prevState,
             token: action.token ?? null,
             isSignout: false,
+            error: null
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
             token: null,
             isSignout: true,
+            error: null
           };
+        case 'ACTION_FAILED':
+          return {
+            ...prevState,
+            error: action.error ?? null
+          }
       }
     },
     {
       isLoading: true,
       isSignout: false,
       token: null,
+      error: null
     }
   );
 
   React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let token;
 
@@ -83,13 +93,21 @@ const AuthContextProvider = ({children}: Props) => {
   const actions = React.useMemo(
     () => ({
       signIn: async (email: string, password: string) => {
-        const token = await authServices.signIn(email, password);
-        dispatch({type: 'SIGN_IN', token});
+        try {
+          const token = await authServices.signIn(email, password);
+          dispatch({type: 'SIGN_IN', token});
+        } catch (e) {
+          dispatch({type: 'ACTION_FAILED', error: e.message});
+        }
       },
       signOut: () => dispatch({type: 'SIGN_OUT'}),
       signUp: async (inputDTO: IClinicInputDTO) => {
-        const token = await authServices.signUp(inputDTO);
-        dispatch({type: 'SIGN_IN', token});
+        try {
+          const token = await authServices.signUp(inputDTO);
+          dispatch({type: 'SIGN_IN', token});
+        } catch (e) {
+          dispatch({type: 'ACTION_FAILED', error: e.message});
+        }
       },
     }),
     [dispatch]

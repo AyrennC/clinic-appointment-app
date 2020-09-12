@@ -50,7 +50,7 @@ export default class AuthService {
   ): Promise<{ clinic: IClinic; token: string }> {
     const clinic = await this.clinicModel.findOne({ where: { email } });
     if (!clinic) {
-      throw new Error('Clinic not found');
+      throw new Error('invalid email or password');
     }
 
     this.logger.silly('Checking password');
@@ -63,7 +63,7 @@ export default class AuthService {
 
       return { clinic, token };
     } else {
-      throw new Error('Invalid Password');
+      throw new Error('invalid email or password');
     }
   }
 

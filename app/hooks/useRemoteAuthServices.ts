@@ -3,6 +3,7 @@ import React from "react";
 import axios from 'axios';
 import {IClinicInputDTO} from "../interfaces/IClinic";
 import env from "../env";
+import {getErrorFromAxiosError} from "../utils/axios";
 
 export default function useRemoteAuthServices() {
   return React.useMemo(
@@ -13,12 +14,20 @@ export default function useRemoteAuthServices() {
 
       return {
         signIn: async (email: string, password: string): Promise<string|null> => {
-          const response = await axiosInstance.post('auth/signin', {email, password});
-          return response.data?.token
+          try {
+            const response = await axiosInstance.post('auth/signin', {email, password});
+            return response.data?.token
+          } catch (e) {
+            throw getErrorFromAxiosError(e);
+          }
         },
         signUp: async (inputDTO: IClinicInputDTO) => {
-          const response = await axiosInstance.post('auth/signup', inputDTO);
-          return response.data?.token
+          try {
+            const response = await axiosInstance.post('auth/signup', inputDTO);
+            return response.data?.token
+          } catch (e) {
+            throw getErrorFromAxiosError(e);
+          }
         },
       }
     },

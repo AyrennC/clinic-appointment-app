@@ -5,20 +5,17 @@ import {ColorSchemeName} from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import {RootStackParamList} from '../types';
-import BottomTabNavigator from './BottomTabNavigator';
-import LinkingConfiguration from './LinkingConfiguration';
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import {AuthContext, IAuthContext} from "../stores/AuthContextProvider";
+import {AuthContext} from "../stores/AuthContextProvider";
 import AgendaScreen from "../screens/AgendaScreen";
 import AddConsultationScreen from "../screens/AddConsultationScreen";
+import useAuthFlashMessages from "../hooks/useAuthFlashMessages";
 
-// If you are not familiar with React Navigation, we recommend going through the
-// "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
+
 export default function Navigation({colorScheme}: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <RootNavigator/>
     </NavigationContainer>
@@ -32,6 +29,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   const context = React.useContext(AuthContext);
 
+  useAuthFlashMessages();
+
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {
@@ -43,7 +42,6 @@ function RootNavigator() {
           <>
             <Stack.Screen name="Agenda" component={AgendaScreen}/>
             <Stack.Screen name="AddConsultation" component={AddConsultationScreen}/>
-            <Stack.Screen name="Root" component={BottomTabNavigator}/>
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{title: 'Oops!'}}/>
           </>
       }

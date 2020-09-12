@@ -17,10 +17,23 @@ export default (app: Router): void => {
     '/signup',
     celebrate({
       body: Joi.object({
-        name: Joi.string().required(),
-        email: Joi.string().required(),
-        password: Joi.string().required(),
-        phone: Joi.string().required(),
+        name: Joi.string().max(200).required(),
+        email: Joi.string().email().max(200).required(),
+        password: Joi.string().min(8).max(200).required(),
+        phone: Joi.string()
+          .pattern(/^\d{8}$/)
+          .required()
+          .error(
+            new Joi.ValidationError(
+              '',
+              [
+                {
+                  message: 'phone must be an 8 digit number',
+                },
+              ],
+              {}
+            )
+          ),
         address: Joi.string().required(),
       }),
     }),

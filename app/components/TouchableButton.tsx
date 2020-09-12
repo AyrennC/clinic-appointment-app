@@ -12,7 +12,7 @@ export interface ButtonProps extends TouchableOpacityProps {
 
 export default function TouchableButton({label, children, ...others}: ButtonProps) {
   return (
-    <TouchableOpacity style={styles.btn} {...others}>
+    <TouchableOpacity  {...others} style={[styles.btn, others.style]}>
       {children ?
         children :
         <MontserratText style={styles.text}>{label}</MontserratText>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Icon } from 'react-native-elements';
 
@@ -60,93 +60,95 @@ export default function AddConsultationScreen({navigation}: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoView}>
-        <View style={styles.logoBorder}/>
-        <View style={styles.logoBody}>
-          <MontserratText style={[styles.logoSubtitle, styles.logo]}>Adding</MontserratText>
-          <MontserratText style={[styles.logoTitle, styles.logo]}>Consultation</MontserratText>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.logoView}>
+          <View style={styles.logoBorder}/>
+          <View style={styles.logoBody}>
+            <MontserratText style={[styles.logoSubtitle, styles.logo]}>Adding</MontserratText>
+            <MontserratText style={[styles.logoTitle, styles.logo]}>Consultation</MontserratText>
+          </View>
         </View>
-      </View>
-      <View style={styles.formView}>
-        <LightTextInput
-          name="bed-patient"
-          type="fontisto"
-          onChangeText={setPatient}
-        >
-          Patient
-        </LightTextInput>
-        <LightTextInput
-          name="doctor"
-          type="material-community"
-          onChangeText={setDoctor}
-        >
-          Doctor
-        </LightTextInput>
-        <LightTextInput
-          name="attach-money"
-          type="material"
-          onChangeText={setFee}
-        >
-          Fee
-        </LightTextInput>
-        <TouchableOpacity onPress={toggleDatePicker} style={styles.dateBtn}>
+        <View style={styles.formView}>
           <LightTextInput
-            name="date-range"
-            type="material"
-            width="100%"
-            editable={false}
-            value={dateStr}>
-            Consultation Date
+            name="bed-patient"
+            type="fontisto"
+            onChangeText={setPatient}
+          >
+            Patient
           </LightTextInput>
-        </TouchableOpacity>
+          <LightTextInput
+            name="doctor"
+            type="material-community"
+            onChangeText={setDoctor}
+          >
+            Doctor
+          </LightTextInput>
+          <LightTextInput
+            name="attach-money"
+            type="material"
+            onChangeText={setFee}
+          >
+            Fee
+          </LightTextInput>
+          <TouchableOpacity onPress={toggleDatePicker} style={styles.dateBtn}>
+            <LightTextInput
+              name="date-range"
+              type="material"
+              width="100%"
+              editable={false}
+              value={dateStr}>
+              Consultation Date
+            </LightTextInput>
+          </TouchableOpacity>
 
-        <LightTextInput
-          name="stethoscope"
-          type="font-awesome"
-          onChangeText={setDiagnosis}
-          height={120}
-          multiline
-          showLabel
-        >
-          Diagnosis
-        </LightTextInput>
-        <LightTextInput
-          name="pill"
-          type="material-community"
-          onChangeText={setMedication}
-          height={120}
-          multiline
-          showLabel
-        >
-          Medication
-        </LightTextInput>
-      </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          is24Hour={true}
-          display="default"
-          onChange={(event, date) => {
-            date && setDate(date);
-            showDate(false);
-          }}
-        />
-      )}
-
-      <TouchableButton onPress={onCreate} label="ADD TO AGENDA"/>
-
-      <TouchableOpacity onPress={() => navigation.navigate('Agenda')} style={styles.backBtn}>
-        <Icon
-          name="angle-left"
-          type="font-awesome"
-          size={18}
-          style={styles.backIcon}
+          <LightTextInput
+            name="stethoscope"
+            type="font-awesome"
+            onChangeText={setDiagnosis}
+            height={120}
+            multiline
+            showLabel
+          >
+            Diagnosis
+          </LightTextInput>
+          <LightTextInput
+            name="pill"
+            type="material-community"
+            onChangeText={setMedication}
+            height={120}
+            multiline
+            showLabel
+          >
+            Medication
+          </LightTextInput>
+        </View>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            is24Hour={true}
+            display="default"
+            onChange={(event, date) => {
+              date && setDate(date);
+              showDate(false);
+            }}
           />
-        <MontserratText style={styles.loginText}>Back to agenda</MontserratText>
-      </TouchableOpacity>
-    </View>
+        )}
+
+        <TouchableButton onPress={onCreate} label="ADD TO AGENDA"/>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Agenda')} style={styles.backBtn}>
+          <Icon
+            name="angle-left"
+            type="font-awesome"
+            size={18}
+            style={styles.backIcon}
+          />
+          <MontserratText style={styles.backText}>Back to agenda</MontserratText>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -156,6 +158,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f4f5',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 30
   },
   logoView: {
     width: '90%',
@@ -194,13 +197,11 @@ const styles = StyleSheet.create({
     width: "85%",
   },
   backBtn: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingBottom: 20
   },
-  loginText: {
+  backText: {
     color: "black"
   },
   backIcon: {

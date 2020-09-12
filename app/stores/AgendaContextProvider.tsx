@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Reducer} from "react";
 import {IConsultation, IConsultationInputDTO} from "../interfaces/IConsultation";
 import useRemoteAgendaServices from "../hooks/useRemoteAgendaServices";
+import moment from 'moment';
 
 export type IAgendaState = Record<string, IConsultation>;
 export type IAgendaComputedState = Record<string, IConsultation[]>;
@@ -16,8 +17,9 @@ export interface IAgendaContext {
 }
 
 export interface IAction {
-  type: 'UPDATE_AGENDAS' | 'REFRESH_AGENDAS',
-  payload: IConsultation[]
+  type: 'HYDRATE_AGENDAS' | 'UPDATE_AGENDAS' | 'REFRESH_AGENDAS',
+  payload: IConsultation[],
+  timestamp?: number
 }
 
 export const AgendaContext = React.createContext<IAgendaContext | undefined>(undefined);
@@ -25,6 +27,8 @@ export const AgendaContext = React.createContext<IAgendaContext | undefined>(und
 interface Props {
   children: JSX.Element
 }
+
+const timeToString = (time: Date|number) => moment(new Date(time))
 
 const AgendaContextProvider = ({children}: Props) => {
   const [state, dispatch] = React.useReducer<Reducer<IAgendaState, IAction>>(
@@ -49,7 +53,7 @@ const AgendaContextProvider = ({children}: Props) => {
       .sort((a, b) => a.date.getTime() - b.date.getTime())
       .reduce(
         (acc: IAgendaComputedState, item: IConsultation) => {
-          const dateStr = item.date.toISOString().split('T')[0]
+          const dateStr = moment(item.date).format('YYYY-MM-DD')
           acc[dateStr] =
             acc[dateStr]
               ? [...acc[dateStr], item]
