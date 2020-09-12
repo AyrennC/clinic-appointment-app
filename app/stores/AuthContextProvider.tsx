@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Reducer} from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 import {IClinicInputDTO} from "../interfaces/IClinic";
+import useRemoteAuthServices from "../hooks/useRemoteAuthServices";
 
 export interface IAuthState {
   token: string | null
@@ -20,7 +21,7 @@ export interface IAuthContext {
 
 export interface IAction {
   type: 'RESTORE_TOKEN' | 'SIGN_IN' | 'SIGN_OUT'
-  token?: string
+  token?: string | null
 }
 
 export const AuthContext = React.createContext<IAuthContext | undefined>(undefined);
@@ -81,24 +82,18 @@ const AuthContextProvider = ({children}: Props) => {
     bootstrapAsync().then();
   }, []);
 
+  const authServices = useRemoteAuthServices();
+
   const actions = React.useMemo(
     () => ({
-      signIn: async (data: any) => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+      signIn: async (email: string, password: string) => {
+        const token = await authServices.signIn(email, password);
+        dispatch({type: 'SIGN_IN', token});
       },
       signOut: () => dispatch({type: 'SIGN_OUT'}),
-      signUp: async (data: any) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+      signUp: async (inputDTO: IClinicInputDTO) => {
+        const token = await authServices.signUp(inputDTO);
+        dispatch({type: 'SIGN_IN', token});
       },
     }),
     []

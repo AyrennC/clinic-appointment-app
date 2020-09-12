@@ -4,12 +4,19 @@ import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {Text, View} from '../components/Themed';
 import {StackScreenProps} from "@react-navigation/stack";
 import {RootStackParamList} from "../types";
+import {AuthContext} from "../stores/AuthContextProvider";
 
 type Props = StackScreenProps<RootStackParamList, 'SignIn'>;
 
 export default function SignInScreen({ navigation }: Props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  const context = React.useContext(AuthContext)
+
+  const onLogin = () => {
+    context && context.actions.signIn(email, password);
+  }
 
   return (
     <View style={styles.container}>
@@ -28,7 +35,7 @@ export default function SignInScreen({ navigation }: Props) {
           placeholderTextColor="#003f5c"
           onChangeText={setPassword}/>
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={onLogin}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>

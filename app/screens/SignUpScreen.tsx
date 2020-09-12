@@ -2,6 +2,7 @@ import * as React from 'react';
 import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 
 import {Text, View} from '../components/Themed';
+import {AuthContext} from "../stores/AuthContextProvider";
 
 export default function SignUpScreen() {
   const [name, setName] = React.useState('');
@@ -9,6 +10,14 @@ export default function SignUpScreen() {
   const [password, setPassword] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const [address, setAddress] = React.useState('');
+
+  const context = React.useContext(AuthContext)
+
+  const onSignUp = () => {
+    context && context.actions.signUp({
+      name, email, password, phone, address
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -48,7 +57,7 @@ export default function SignUpScreen() {
           placeholderTextColor="#003f5c"
           onChangeText={setAddress}/>
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={onSignUp}>
         <Text style={styles.loginText}>SIGN UP</Text>
       </TouchableOpacity>
     </View>
