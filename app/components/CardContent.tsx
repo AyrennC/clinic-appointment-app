@@ -1,9 +1,6 @@
 import React from 'react';
-import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text} from './Themed';
-import {IConsultation} from "../interfaces/IConsultation";
+import {StyleSheet, View} from 'react-native';
 import {Icon} from 'react-native-elements'
-import moment from "moment";
 import {MontserratText, TitleText} from "./StyledText";
 import {IconProps} from "react-native-elements";
 

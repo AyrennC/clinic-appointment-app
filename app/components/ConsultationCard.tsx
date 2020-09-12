@@ -1,8 +1,6 @@
 import React from 'react';
-import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text} from './Themed';
+import {StyleSheet, View} from 'react-native';
 import {IConsultation} from "../interfaces/IConsultation";
-import {Icon} from 'react-native-elements'
 import moment from "moment";
 import {MontserratText} from "./StyledText";
 import CardContent from "./CardContent";
@@ -71,19 +69,4 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14
   },
-  iconView: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center"
-  },
-  icon: {
-    paddingLeft: 4,
-    paddingRight: 12
-  },
-  text: {
-    color: '#F26627',
-  },
-  title: {
-    color: '#F26627',
-  }
 });
