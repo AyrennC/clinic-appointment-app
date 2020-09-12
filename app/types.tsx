@@ -2,6 +2,8 @@ export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   Root: undefined;
+  Agenda: undefined;
+  AddConsultation: undefined;
   NotFound: undefined;
 };
 

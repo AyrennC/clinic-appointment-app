@@ -10,6 +10,8 @@ import LinkingConfiguration from './LinkingConfiguration';
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import {AuthContext, IAuthContext} from "../stores/AuthContextProvider";
+import AgendaScreen from "../screens/AgendaScreen";
+import AddConsultationScreen from "../screens/AddConsultationScreen";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -39,6 +41,8 @@ function RootNavigator() {
             <Stack.Screen name="SignUp" component={SignUpScreen}/>
           </> :
           <>
+            <Stack.Screen name="Agenda" component={AgendaScreen}/>
+            <Stack.Screen name="AddConsultation" component={AddConsultationScreen}/>
             <Stack.Screen name="Root" component={BottomTabNavigator}/>
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{title: 'Oops!'}}/>
           </>

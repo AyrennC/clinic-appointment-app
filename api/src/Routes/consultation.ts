@@ -22,6 +22,7 @@ export default (app: Router): void => {
         diagnosis: Joi.string().required(),
         medication: Joi.string().required(),
         fee: Joi.number().required(),
+        date: Joi.date().required(),
       }),
     }),
     isAuth,

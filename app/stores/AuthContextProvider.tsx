@@ -72,10 +72,6 @@ const AuthContextProvider = ({children}: Props) => {
         // Restoring token failed
       }
 
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       token ? dispatch({type: 'RESTORE_TOKEN', token: token ?? undefined}) : dispatch({type: 'SIGN_OUT'})
     };
 
@@ -96,7 +92,7 @@ const AuthContextProvider = ({children}: Props) => {
         dispatch({type: 'SIGN_IN', token});
       },
     }),
-    []
+    [dispatch]
   );
 
 

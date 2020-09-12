@@ -2,12 +2,13 @@ import Config from 'react-native-config';
 import React from "react";
 import axios from 'axios';
 import {IClinicInputDTO} from "../interfaces/IClinic";
+import env from "../env";
 
 export default function useRemoteAuthServices() {
   return React.useMemo(
     () => {
       const axiosInstance = axios.create({
-        baseURL: 'http://localhost/api'
+        baseURL: env.API_HOST
       });
 
       return {

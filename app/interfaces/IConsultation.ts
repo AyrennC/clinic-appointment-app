@@ -6,3 +6,7 @@ export interface IConsultationInputDTO {
   fee: number;
   date: Date;
 }
+
+export interface IConsultation extends IConsultationInputDTO{
+  id: number;
+}
