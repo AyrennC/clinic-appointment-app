@@ -1,15 +1,27 @@
 import * as React from 'react';
-import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Icon } from 'react-native-elements';
 
-import {Text, View} from '../components/Themed';
+import {View} from '../components/Themed';
 import {StackScreenProps} from "@react-navigation/stack";
 import {RootStackParamList} from "../types";
 import {AuthContext} from "../stores/AuthContextProvider";
 import {AgendaContext} from "../stores/AgendaContextProvider";
 import {IConsultationInputDTO} from "../interfaces/IConsultation";
+import {MontserratText} from "../components/StyledText";
+import StyledTextInput, {StyledTextInputProps} from "../components/StyledTextInput";
+import moment from "moment";
+import TouchableButton from "../components/TouchableButton";
 
 type Props = StackScreenProps<RootStackParamList, 'SignIn'>;
+
+const LightTextInput = (props: StyledTextInputProps) =>
+  <StyledTextInput
+    width="85%"
+    backgroundColor="#f2f4f5"
+    color="#f26628"
+    {...props} />
 
 export default function AddConsultationScreen({navigation}: Props) {
   const [doctor, setDoctor] = React.useState('');
@@ -19,6 +31,8 @@ export default function AddConsultationScreen({navigation}: Props) {
   const [fee, setFee] = React.useState<string>('0');
   const [date, setDate] = React.useState<Date>(new Date());
   const [show, showDate] = React.useState<boolean>(false);
+
+  const dateStr = React.useMemo(() => moment(date).format('MMMM Do hh:mm A'), [date])
 
   const toggleDatePicker = () => {
     showDate(!show)
@@ -47,47 +61,66 @@ export default function AddConsultationScreen({navigation}: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Consultation</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Doctor..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setDoctor}/>
+      <View style={styles.logoView}>
+        <View style={styles.logoBorder}/>
+        <View style={styles.logoBody}>
+          <MontserratText style={[styles.logoSubtitle, styles.logo]}>Adding</MontserratText>
+          <MontserratText style={[styles.logoTitle, styles.logo]}>Consultation</MontserratText>
+        </View>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Patient..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setPatient}/>
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Diagnosis..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setDiagnosis}/>
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Medication..."
-          placeholderTextColor="#003f5c"
-          onChangeText={setMedication}/>
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Fee..."
-          placeholderTextColor="#003f5c"
-          keyboardType="number-pad"
-          onChangeText={setFee}/>
-      </View>
-      <View style={styles.inputView}>
-        <Text style={styles.inputText} onPress={toggleDatePicker}>
-          {date.toLocaleString()}
-        </Text>
+      <View style={styles.formView}>
+        <LightTextInput
+          name="bed-patient"
+          type="fontisto"
+          onChangeText={setPatient}
+        >
+          Patient
+        </LightTextInput>
+        <LightTextInput
+          name="doctor"
+          type="material-community"
+          onChangeText={setDoctor}
+        >
+          Doctor
+        </LightTextInput>
+        <LightTextInput
+          name="attach-money"
+          type="material"
+          onChangeText={setFee}
+        >
+          Fee
+        </LightTextInput>
+        <TouchableOpacity onPress={toggleDatePicker} style={styles.dateBtn}>
+          <LightTextInput
+            name="date-range"
+            type="material"
+            width="100%"
+            editable={false}
+            value={dateStr}>
+            Consultation Date
+          </LightTextInput>
+        </TouchableOpacity>
+
+        <LightTextInput
+          name="stethoscope"
+          type="font-awesome"
+          onChangeText={setDiagnosis}
+          height={120}
+          multiline
+          showLabel
+        >
+          Diagnosis
+        </LightTextInput>
+        <LightTextInput
+          name="pill"
+          type="material-community"
+          onChangeText={setMedication}
+          height={120}
+          multiline
+          showLabel
+        >
+          Medication
+        </LightTextInput>
       </View>
       {show && (
         <DateTimePicker
@@ -101,8 +134,17 @@ export default function AddConsultationScreen({navigation}: Props) {
           }}
         />
       )}
-      <TouchableOpacity style={styles.loginBtn} onPress={onCreate}>
-        <Text style={styles.loginText}>CREATE</Text>
+
+      <TouchableButton onPress={onCreate} label="ADD TO AGENDA"/>
+
+      <TouchableOpacity onPress={() => navigation.navigate('Agenda')} style={styles.backBtn}>
+        <Icon
+          name="angle-left"
+          type="font-awesome"
+          size={18}
+          style={styles.backIcon}
+          />
+        <MontserratText style={styles.loginText}>Back to agenda</MontserratText>
       </TouchableOpacity>
     </View>
   );
@@ -111,40 +153,57 @@ export default function AddConsultationScreen({navigation}: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#003f5c',
+    backgroundColor: '#f2f4f5',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  logoView: {
+    width: '90%',
+  },
+  logoBorder: {
+    backgroundColor: '#f26628',
+    height: 24,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
+  },
+  logoBody: {
+    backgroundColor: '#f9a36c',
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+  },
+  logoTitle: {
+    fontSize: 28,
+  },
+  logoSubtitle: {
+    fontSize: 12,
+  },
   logo: {
-    fontWeight: "bold",
-    fontSize: 50,
-    color: "#fb5b5a",
-    marginBottom: 40
+    color: "#f1f1f1",
   },
-  inputView: {
-    width: "80%",
-    backgroundColor: "#465881",
-    borderRadius: 25,
-    height: 50,
-    marginBottom: 20,
+  formView: {
+    paddingTop: 24,
+    paddingBottom: 10,
+    width: '90%',
+    borderBottomStartRadius: 8,
+    borderBottomEndRadius: 8,
+    flex: 1,
     justifyContent: "center",
-    padding: 20
+    alignItems: "center"
   },
-  inputText: {
-    height: 50,
-    color: "white"
+  dateBtn: {
+    width: "85%",
   },
-  loginBtn: {
-    width: "80%",
-    backgroundColor: "#fb5b5a",
-    borderRadius: 25,
-    height: 50,
+  backBtn: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    marginBottom: 10
+    paddingBottom: 20
   },
   loginText: {
-    color: "white"
+    color: "black"
+  },
+  backIcon: {
+    paddingRight: 6
   }
 });

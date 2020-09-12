@@ -41,7 +41,7 @@ export default function ExpandableText(props: ExpandableTextProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 8
+    paddingVertical: 4
   },
   title: {
     flexDirection: "row",

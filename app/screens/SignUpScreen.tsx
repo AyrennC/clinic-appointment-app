@@ -49,7 +49,11 @@ export default function SignUpScreen({navigation}: Props) {
           type="entypo"
           onChangeText={setAddress}
           height={120}
-          multiline/>
+          labelColor="white"
+          showLabel
+          multiline>
+          Address
+        </StyledTextInput>
 
         <TouchableButton onPress={onSignUp} label="REGISTER"/>
 
