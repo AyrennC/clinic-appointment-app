@@ -30,13 +30,10 @@ export default function AddConsultationScreen({navigation}: Props) {
   const [medication, setMedication] = React.useState('');
   const [fee, setFee] = React.useState<string>('0');
   const [date, setDate] = React.useState<Date>(new Date());
-  const [show, showDate] = React.useState<boolean>(false);
+  const [showDatePicker, setShowDatePicker] = React.useState<boolean>(false);
+  const [showTimePicker, setShowTimePicker] = React.useState<boolean>(false);
 
   const dateStr = React.useMemo(() => moment(date).format('MMMM Do hh:mm A'), [date])
-
-  const toggleDatePicker = () => {
-    showDate(!show)
-  }
 
   const authContext = React.useContext(AuthContext)
   const agendaContext = React.useContext(AgendaContext)
@@ -55,7 +52,9 @@ export default function AddConsultationScreen({navigation}: Props) {
         date
       }
 
-      createAgenda(token, inputDTO).then();
+      createAgenda(token, inputDTO).then(
+        (success: boolean) => success && navigation.navigate('Agenda')
+      )
     }
   }
 
@@ -88,10 +87,11 @@ export default function AddConsultationScreen({navigation}: Props) {
             name="attach-money"
             type="material"
             onChangeText={setFee}
+            keyboardType="number-pad"
           >
             Fee
           </LightTextInput>
-          <TouchableOpacity onPress={toggleDatePicker} style={styles.dateBtn}>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.dateBtn}>
             <LightTextInput
               name="date-range"
               type="material"
@@ -123,15 +123,26 @@ export default function AddConsultationScreen({navigation}: Props) {
             Medication
           </LightTextInput>
         </View>
-        {show && (
+        {showDatePicker && (
           <DateTimePicker
-            testID="dateTimePicker"
             value={date}
-            is24Hour={true}
-            display="default"
-            onChange={(event, date) => {
+            mode="date"
+            onChange={(event: unknown, date: Date|undefined) => {
+              setShowDatePicker(false);
               date && setDate(date);
-              showDate(false);
+              setShowTimePicker(true);
+            }}
+          />
+        )}
+
+
+        {showTimePicker && (
+          <DateTimePicker
+            value={date}
+            mode="time"
+            onChange={(event: unknown, date: Date|undefined) => {
+              setShowTimePicker(false);
+              date && setDate(date);
             }}
           />
         )}

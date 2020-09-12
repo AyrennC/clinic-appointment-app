@@ -11,6 +11,7 @@ import {AuthContext} from "../stores/AuthContextProvider";
 import AgendaScreen from "../screens/AgendaScreen";
 import AddConsultationScreen from "../screens/AddConsultationScreen";
 import useAuthFlashMessages from "../hooks/useAuthFlashMessages";
+import useAgendaFlashMessages from "../hooks/useAgendaFlashMessages";
 
 
 export default function Navigation({colorScheme}: { colorScheme: ColorSchemeName }) {
@@ -30,6 +31,7 @@ function RootNavigator() {
   const context = React.useContext(AuthContext);
 
   useAuthFlashMessages();
+  useAgendaFlashMessages();
 
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>

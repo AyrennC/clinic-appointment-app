@@ -14,9 +14,9 @@ export interface IAuthState {
 export interface IAuthContext {
   state: IAuthState;
   actions: {
-    signIn: (email: string, password: string) => Promise<void>;
+    signIn: (email: string, password: string) => Promise<boolean>;
     signOut: () => void;
-    signUp: (inputDTO: IClinicInputDTO) => Promise<void>;
+    signUp: (inputDTO: IClinicInputDTO) => Promise<boolean>;
   }
 }
 
@@ -92,21 +92,25 @@ const AuthContextProvider = ({children}: Props) => {
 
   const actions = React.useMemo(
     () => ({
-      signIn: async (email: string, password: string) => {
+      signIn: async (email: string, password: string): Promise<boolean> => {
         try {
           const token = await authServices.signIn(email, password);
           dispatch({type: 'SIGN_IN', token});
+          return true;
         } catch (e) {
           dispatch({type: 'ACTION_FAILED', error: e.message});
+          return false;
         }
       },
       signOut: () => dispatch({type: 'SIGN_OUT'}),
-      signUp: async (inputDTO: IClinicInputDTO) => {
+      signUp: async (inputDTO: IClinicInputDTO): Promise<boolean> => {
         try {
           const token = await authServices.signUp(inputDTO);
           dispatch({type: 'SIGN_IN', token});
+          return true;
         } catch (e) {
           dispatch({type: 'ACTION_FAILED', error: e.message});
+          return false;
         }
       },
     }),

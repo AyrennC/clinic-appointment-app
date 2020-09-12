@@ -50,6 +50,12 @@ export default function AgendaScreen({navigation}: Props) {
     })
   }
 
+  const [showBtn, setShowBtn] = React.useState<boolean>(true);
+
+  const toggleBtn = () => {
+    setShowBtn(!showBtn)
+  }
+
   const onLogout = () => {
     if (authContext) {
       const {signOut} = authContext.actions;
@@ -70,21 +76,30 @@ export default function AgendaScreen({navigation}: Props) {
       <Agenda
         items={items}
         renderItem={(item: IConsultation) => <ConsultationCard item={item}/>}
-        renderEmptyDate={() => <EmptyDate />}
+        renderEmptyDate={() => <EmptyDate/>}
         renderEmptyData={() => <EmptyAgenda/>}
         loadItemsForMonth={hydrate}
       />
       <View style={styles.btnView}>
-        <TouchableButton label="ADD CONSULTATION" onPress={() => navigation.navigate('AddConsultation')} style={styles.addBtn}/>
-        <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
-          <Icon
-            name="logout"
-            type="simple-line-icon"
-            size={18}
-            style={styles.logoutIcon}
-          />
-          <MontserratText style={styles.logoutText}>Logout</MontserratText>
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnDecorator} onPress={toggleBtn}/>
+        {
+          showBtn &&
+          (
+            <>
+              <TouchableButton label="ADD CONSULTATION" onPress={() => navigation.navigate('AddConsultation')}
+                               style={styles.addBtn}/>
+              <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
+                <Icon
+                  name="logout"
+                  type="simple-line-icon"
+                  size={18}
+                  style={styles.logoutIcon}
+                />
+                <MontserratText style={styles.logoutText}>Logout</MontserratText>
+              </TouchableOpacity>
+            </>
+          )
+        }
       </View>
     </View>
   )
@@ -98,9 +113,17 @@ const styles = StyleSheet.create({
   btnView: {
     alignItems: 'center',
     paddingBottom: 12,
+    backgroundColor: '#fff'
+  },
+  btnDecorator: {
+    width: '15%',
+    borderRadius: 20,
+    borderWidth: 4,
+    marginTop: 10,
+    borderColor: '#e1eaea',
   },
   addBtn: {
-    marginTop: 20
+    marginTop: 10
   },
   logoutBtn: {
     flexDirection: "row",
