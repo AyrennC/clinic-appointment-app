@@ -16,7 +16,10 @@ export default function App() {
 
   useCustomFonts();
 
-  console.ignoredYellowBox = ["Can't perform:"];
+  // remove warning from react-native-calendars
+  console.ignoredYellowBox = [
+    "Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application."
+  ];
 
   if (!isLoadingComplete) {
     return null;
