@@ -23,6 +23,14 @@ export function ClinicFactory(sequelize: Sequelize): ClinicModel {
       allowNull: false,
       unique: true,
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
