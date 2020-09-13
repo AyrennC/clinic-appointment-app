@@ -43,6 +43,18 @@ Navigate to `/app` directory and execute:
    yarn start
     ```
    
+# Server language, and libraries
+
+**Typescript** is used with conjunction of **InversifyJS**, this allows an Inversion of Control pattern to be deployed through decorator.
+
+This enables greater decoupling between different components and domains.
+
+Due to the absence of heavy data-flow or transformation, and most of the backend functionalities are implemented with native modules. No unit test has been implemented. 
+
+## Language Requirements
+
+The codebase can be transpile to ES6 Javascript with `tsc` if using Native NodeJS is a essential requirement.
+   
 # API Endpoints
 
 ## Clinic Management
