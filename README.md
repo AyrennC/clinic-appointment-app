@@ -2,6 +2,8 @@
 
 A React Native application for managing clinic appointments, powered by Express.js.
 
+**The yellow box warning regarding potential memory-leak is caused by an external node module `react-native-calendar`**
+
 ## Quickstart
 
 ### Backend Services
