@@ -18,7 +18,7 @@ Navigate to `/docker` directory and execute:
    echo JWT_SECRET=your-super-secret-string > .env
     ```
    
-3. Start the backend services, the server will be served at port `80`.
+3. Start the backend services, the server will be served at port `80` under `/api`.
     ```shell script
    docker-compose up
     ```
@@ -35,7 +35,7 @@ Navigate to `/app` directory and execute:
    
 2. Edit the `API_URL` entry under `.env`, it should be set to your local ip-address
     ```shell script
-   echo API_URL=http://127.0.0.1 > .env
+   echo API_URL=http://127.0.0.1/api > .env
     ```
    
 3. Start the application
