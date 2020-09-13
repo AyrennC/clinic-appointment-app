@@ -14,7 +14,7 @@ export default function EmptyDate() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#efe0e0',
+    backgroundColor: '#f6efef',
     flex: 1,
     borderRadius: 8,
     marginRight: 10,
@@ -22,24 +22,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  textView: {
-    width: "80%",
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f2f2f2',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   title: {
-    color: '#ff8888',
+    color: '#fcb0b0',
     fontSize: 24
   }
 });

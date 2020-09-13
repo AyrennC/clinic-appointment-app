@@ -7,5 +7,6 @@ export interface IClinic {
 }
 
 export interface IClinicInputDTO extends IClinic {
+  id: string;
   password: string;
 }

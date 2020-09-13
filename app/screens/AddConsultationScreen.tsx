@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 
 import {View} from '../components/Themed';
 import {StackScreenProps} from "@react-navigation/stack";
@@ -14,7 +14,7 @@ import StyledTextInput, {StyledTextInputProps} from "../components/StyledTextInp
 import moment from "moment";
 import TouchableButton from "../components/TouchableButton";
 
-type Props = StackScreenProps<RootStackParamList, 'SignIn'>;
+type Props = StackScreenProps<RootStackParamList, 'AddConsultation'>;
 
 const LightTextInput = (props: StyledTextInputProps) =>
   <StyledTextInput
@@ -23,7 +23,7 @@ const LightTextInput = (props: StyledTextInputProps) =>
     color="#f26628"
     {...props} />
 
-export default function AddConsultationScreen({navigation}: Props) {
+export default function AddConsultationScreen({navigation, route}: Props) {
   const [doctor, setDoctor] = React.useState('');
   const [patient, setPatient] = React.useState('');
   const [diagnosis, setDiagnosis] = React.useState('');
@@ -38,10 +38,10 @@ export default function AddConsultationScreen({navigation}: Props) {
   const authContext = React.useContext(AuthContext)
   const agendaContext = React.useContext(AgendaContext)
 
-  const onCreate = () => {
+  const onCreate = async () => {
     if (authContext?.state.token && agendaContext) {
       const {token} = authContext.state;
-      const {createAgenda} = agendaContext.actions;
+      const {createAgenda, attachFollowUp} = agendaContext.actions;
 
       const inputDTO: IConsultationInputDTO = {
         doctor,
@@ -52,11 +52,20 @@ export default function AddConsultationScreen({navigation}: Props) {
         date
       }
 
-      createAgenda(token, inputDTO).then(
-        (success: boolean) => success && navigation.navigate('Agenda')
-      )
+      let success;
+      if (parentId) {
+        success = await attachFollowUp(token, parentId, inputDTO);
+      } else {
+        success = await createAgenda(token, inputDTO);
+      }
+
+      if (success) {
+        navigation.navigate('Agenda')
+      }
     }
   }
+
+  const {parentId} = route.params
 
   return (
     <ScrollView>
@@ -65,7 +74,9 @@ export default function AddConsultationScreen({navigation}: Props) {
           <View style={styles.logoBorder}/>
           <View style={styles.logoBody}>
             <MontserratText style={[styles.logoSubtitle, styles.logo]}>Adding</MontserratText>
-            <MontserratText style={[styles.logoTitle, styles.logo]}>Consultation</MontserratText>
+            <MontserratText style={[styles.logoTitle, styles.logo]}>
+              {parentId ? 'Consultation' : 'Follow Up'}
+            </MontserratText>
           </View>
         </View>
         <View style={styles.formView}>
@@ -127,7 +138,7 @@ export default function AddConsultationScreen({navigation}: Props) {
           <DateTimePicker
             value={date}
             mode="date"
-            onChange={(event: unknown, date: Date|undefined) => {
+            onChange={(event: unknown, date: Date | undefined) => {
               setShowDatePicker(false);
               date && setDate(date);
               setShowTimePicker(true);
@@ -140,7 +151,7 @@ export default function AddConsultationScreen({navigation}: Props) {
           <DateTimePicker
             value={date}
             mode="time"
-            onChange={(event: unknown, date: Date|undefined) => {
+            onChange={(event: unknown, date: Date | undefined) => {
               setShowTimePicker(false);
               date && setDate(date);
             }}
@@ -189,7 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   logoSubtitle: {
-    fontSize: 12,
+    fontSize: 14,
   },
   logo: {
     color: "#f1f1f1",

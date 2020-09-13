@@ -2,7 +2,7 @@ import Config from 'react-native-config';
 import React from "react";
 import axios from 'axios';
 import {IConsultation, IConsultationInputDTO} from "../interfaces/IConsultation";
-import env from "../env";
+import config from "../config";
 import * as R from 'ramda'
 import {getErrorFromAxiosError} from "../utils/axios";
 
@@ -20,14 +20,9 @@ interface IConsultationResponse extends Omit<IConsultation, 'date'> {
 const isIConsultationResponse = (a: unknown): a is IConsultationResponse =>
   R.allPass([
     R.is(Object),
-    R.anyPass([
-      R.propIs(Number, 'followUpId'),
-      R.propSatisfies(R.isNil, 'followUpId')
-    ]),
     ...R.map(R.propIs(Number), [
       'id',
       'fee',
-      'clinicId',
     ]),
     ...R.map(R.propIs(String), [
       'doctor',
@@ -48,7 +43,7 @@ export default function useRemoteAgendaServices() {
   return React.useMemo(
     () => {
       const axiosInstance = axios.create({
-        baseURL: env.API_HOST
+        baseURL: config.API_HOST
       });
 
       return {
@@ -65,6 +60,23 @@ export default function useRemoteAgendaServices() {
             throw getErrorFromAxiosError(e);
           }
         },
+
+        attachFollowUp: async (token: string, id: string, followUpId: string): Promise<IConsultation | null> => {
+          try {
+            const response = await axiosInstance.post(`consultation/attach/${id}`, {
+              followUpId: followUpId.toString()
+            }, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            const {consultation} = response.data;
+            return isIConsultationResponse(consultation) ? parseAgenda(consultation) : null;
+          } catch (e) {
+            throw getErrorFromAxiosError(e);
+          }
+        },
+
         fetchAgendas: async (token: string): Promise<IConsultation[]> => {
           try {
             const response = await axiosInstance.get('consultation/list', {

@@ -6,7 +6,7 @@ import {IConsultation} from "../interfaces/IConsultation";
 import {StackScreenProps} from "@react-navigation/stack";
 import {RootStackParamList} from "../types";
 import {AuthContext} from "../stores/AuthContextProvider";
-import {AgendaContext, IAgendaComputedState} from "../stores/AgendaContextProvider";
+import {AgendaContext, IAgendaComputedState, IAgendaState} from "../stores/AgendaContextProvider";
 import TouchableButton from "../components/TouchableButton";
 import EmptyAgenda from "../components/EmptyAgenda";
 import {Icon} from "react-native-elements";
@@ -63,43 +63,53 @@ export default function AgendaScreen({navigation}: Props) {
     }
   }
 
-  const contextItems: Record<string, IConsultation[]> = React.useMemo(() => {
-    return agendaContext?.computed ?? {};
-  }, [agendaContext])
+  const computedItems = React.useMemo(() =>
+      agendaContext?.state
+        ? Object.values(agendaContext.state.byId)
+          .sort((a, b) => a.date.getTime() - b.date.getTime())
+          .reduce(
+            (acc: IAgendaComputedState, item: IConsultation) => {
+              const dateStr = moment(item.date).format('YYYY-MM-DD')
+              acc[dateStr] =
+                acc[dateStr]
+                  ? [...acc[dateStr], item]
+                  : [item];
+              return acc;
+            }, {})
+        : {}
+    , [agendaContext])
 
   const items: Record<string, IConsultation[]> = React.useMemo(() =>
-      R.mergeDeepRight(hydratedItems, contextItems) as Record<string, IConsultation[]>,
-    [contextItems, hydratedItems])
+      R.mergeDeepRight(hydratedItems, computedItems) as Record<string, IConsultation[]>,
+    [computedItems, hydratedItems])
+
+  const onAttach = (item: IConsultation) => {
+    navigation.navigate('AddConsultation', {parentId: item.id})
+  }
 
   return (
     <View style={styles.container}>
       <Agenda
         items={items}
-        renderItem={(item: IConsultation) => <ConsultationCard item={item}/>}
+        renderItem={(item: IConsultation) => <ConsultationCard item={item} onAttach={onAttach}/>}
         renderEmptyDate={() => <EmptyDate/>}
         renderEmptyData={() => <EmptyAgenda/>}
+        rowHasChanged={(a, b) => a.updatedAt !== b.updatedAt || a.followUp !== b.followUp}
         loadItemsForMonth={hydrate}
       />
       <View style={styles.btnView}>
-        <TouchableOpacity style={styles.btnDecorator} onPress={toggleBtn}/>
-        {
-          showBtn &&
-          (
-            <>
-              <TouchableButton label="ADD CONSULTATION" onPress={() => navigation.navigate('AddConsultation')}
-                               style={styles.addBtn}/>
-              <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
-                <Icon
-                  name="logout"
-                  type="simple-line-icon"
-                  size={18}
-                  style={styles.logoutIcon}
-                />
-                <MontserratText style={styles.logoutText}>Logout</MontserratText>
-              </TouchableOpacity>
-            </>
-          )
-        }
+        <TouchableOpacity style={styles.btnDecorator}/>
+        <TouchableButton label="ADD CONSULTATION" onPress={() => navigation.navigate('AddConsultation', {})}
+                         style={styles.addBtn}/>
+        <TouchableOpacity onPress={onLogout} style={styles.logoutBtn}>
+          <Icon
+            name="logout"
+            type="simple-line-icon"
+            size={18}
+            style={styles.logoutIcon}
+          />
+          <MontserratText style={styles.logoutText}>Logout</MontserratText>
+        </TouchableOpacity>
       </View>
     </View>
   )

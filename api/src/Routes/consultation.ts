@@ -53,6 +53,39 @@ export default (app: Router): void => {
     }
   );
 
+  route.post(
+    '/attach/:id',
+    celebrate({
+      body: Joi.object({
+        followUpId: Joi.string().required(),
+      }),
+    }),
+    isAuth,
+    attachCurrentUser,
+    async (
+      req: Request & HasCurrentUser,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const logger = container.get<Logger>('Logger');
+      logger.debug('Calling attachFollowUp endpoint with body: %o', req.body);
+      try {
+        const clinicServiceInstance = container.get<ClinicService>(
+          'ClinicService'
+        );
+        const { consultation } = await clinicServiceInstance.attachFollowUp(
+          req.currentUser,
+          req.params.id,
+          req.body.followUpId
+        );
+        return res.status(200).json({ consultation });
+      } catch (e) {
+        logger.error('error: %o', e);
+        return next(e);
+      }
+    }
+  );
+
   route.get(
     '/list',
     isAuth,

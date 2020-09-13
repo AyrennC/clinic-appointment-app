@@ -1,20 +1,30 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {IConsultation} from "../interfaces/IConsultation";
 import moment from "moment";
-import {MontserratText} from "./StyledText";
+import {MontserratText, TitleText} from "./StyledText";
 import CardContent from "./CardContent";
 import ExpandableText from "./ExpandableText";
+import {Icon} from "react-native-elements";
 
-export default function ConsultationCard({item}: { item: IConsultation }) {
+export interface ConsultationCardProps {
+  item: IConsultation,
+  onAttach: (item: IConsultation) => unknown;
+}
+
+export default function ConsultationCard({item, onAttach}: ConsultationCardProps) {
 
   const timeStr = React.useMemo(() =>
-      moment(item.date).format('hh:mm A')
-    , [item]);
+    moment(item.date).format('hh:mm A'), [item]);
 
   const dateStr = React.useMemo(() =>
-      moment(item.date).format('MMMM Do')
-    , [item]);
+    moment(item.date).format('MMMM Do'), [item]);
+
+  const {followUp} = item;
+
+  const followUpDateStr = React.useMemo(() =>
+    item.followUp ?
+      moment(item.followUp.date).format('MMMM Do hh:mm A') : null, [item]);
 
   return (
     <View style={styles.item}>
@@ -35,6 +45,26 @@ export default function ConsultationCard({item}: { item: IConsultation }) {
           {item.medication}
         </ExpandableText>
       </View>
+      {
+        followUpDateStr ?
+          (
+            <View style={[styles.addView]}>
+              <MontserratText style={styles.addText}>Follow Up</MontserratText>
+              <MontserratText style={styles.text}>{followUpDateStr}</MontserratText>
+            </View>
+          ) : (
+            <TouchableOpacity onPress={() => onAttach(item)} style={[styles.iconView, styles.addView]}>
+              <MontserratText style={styles.addText}>Add Follow Up</MontserratText>
+              <Icon
+                name="plus-circle"
+                type="font-awesome-5"
+                size={18}
+                style={styles.addIcon}
+                color="#fb5a5a"
+              />
+            </TouchableOpacity>
+          )
+      }
     </View>
   );
 }
@@ -69,4 +99,32 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14
   },
+  iconView: {
+    paddingVertical: 4,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  icon: {
+    paddingLeft: 4,
+    paddingRight: 8
+  },
+  text: {
+    fontSize: 13,
+  },
+  addView: {
+    backgroundColor: '#fffafa',
+    paddingVertical: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomStartRadius: 8,
+    borderBottomEndRadius: 8,
+  },
+  addIcon: {
+    paddingLeft: 8
+  },
+  addText: {
+    color: '#fb5a5a',
+    fontSize: 16
+  }
 });

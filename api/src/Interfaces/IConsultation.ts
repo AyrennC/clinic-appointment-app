@@ -1,4 +1,4 @@
-import { HasClinic, HasId, HasTimestamps } from './Traits';
+import { HasClinic, HasFollowUp, HasId, HasTimestamps } from './Traits';
 
 export interface IConsultationInputDTO {
   doctor: string;
@@ -12,4 +12,5 @@ export interface IConsultationInputDTO {
 export type IConsultation = IConsultationInputDTO &
   HasId &
   HasTimestamps &
-  HasClinic;
+  HasClinic &
+  HasFollowUp;

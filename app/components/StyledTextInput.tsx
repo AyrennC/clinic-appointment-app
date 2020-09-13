@@ -34,7 +34,7 @@ export default function StyledTextInput(props: StyledTextInputProps) {
         <View style={styles.labelView}>
           <Icon
             style={styles.icon}
-            size={22}
+            size={20}
             name={name}
             type={type}
             color={labelColor ?? color}
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   icon: {
-    paddingRight: 16
+    paddingRight: 16,
+    paddingBottom: 4
   },
   inputText: {
     fontFamily: "Montserrat_500Medium",

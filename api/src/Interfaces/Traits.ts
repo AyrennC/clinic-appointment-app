@@ -15,3 +15,7 @@ export interface HasPassword {
 export interface HasClinic {
   clinicId: string;
 }
+
+export interface HasFollowUp {
+  followUpId: string;
+}

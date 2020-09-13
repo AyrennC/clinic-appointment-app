@@ -8,5 +8,7 @@ export interface IConsultationInputDTO {
 }
 
 export interface IConsultation extends IConsultationInputDTO{
-  id: number;
+  id: string;
+  followUp?: IConsultationInputDTO | null;
+  updatedAt: Date
 }
