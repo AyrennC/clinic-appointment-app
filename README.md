@@ -1,4 +1,4 @@
-# Clinic - Code Test
+# Clinic - Appointment Application
 
 A React Native application for managing clinic appointments, powered by Express.js.
 
